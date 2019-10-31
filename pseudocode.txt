@@ -57,5 +57,6 @@ Git workflow
 git init 	// to create a repository
 git add * 	// add all new files
 git commit - m "message describing changes"  // commit changes to local repo 
-git push origin <branch> // push up to git - will ask for username richardhosking and password 
+git remote add origin git@github.com:richardhosking/repo_name
+$ git push -u origin master			// push up to git - will ask for username richardhosking and password 
 
