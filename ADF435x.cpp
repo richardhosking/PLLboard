@@ -33,24 +33,11 @@ void ADF435x::initialize(uint32_t frequency, uint32_t referenceClock){
     _ref_doubler = 0; 	// reference doubler 1
     _ref_halve = 0; 	// reference divider 1
 
-// Initializes a new ADF435x object referenceClock (in MHz), and initial frequency Hz/10 to fit in 2^32
-
-void ADF435x::initialize(uint32_t frequency, uint32_t referenceClock){
-    _freq = frequency; // one tenth of real value REMEMBER!
-    _refClk = referenceClock;
-    phase = 1;
-
-    _feedbackType = 0;  //0=fractional, 1=integer
-    if (_feedbackType) _ABP = 1;
-    _doubler = 0; //
-    _halve = 0; //
     _channelSpacing = 25000; //25KHz
     _powerdown = 0;
     _auxOnOff = 0;
     _rfEnabled = 1;
-
     _prescaler = 0;  // 4/5 or 8/9...
-
 
     // default power = -5dbm or 0 in this case... (0-3)
     _auxPower = 0;
