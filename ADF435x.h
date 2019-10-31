@@ -44,18 +44,12 @@ class ADF435x{
         void debug();
         
         // Variables 
-<<<<<<< HEAD
+
         uint32_t _freq, fPFD, _refClk, _INT;   // _INT is integer of main divider
         int phase;
         unsigned int _divider, _auxPower, _rfPower;
         uint32_t _mod;
 	// _frac is fraction _modulus is modulus of fractional N divider
-=======
-        uint32_t _freq, fPFD, _refClk, _integ;
-        int phase;
-        unsigned int _divider, _auxPower, _rfPower;
-        uint32_t _mod;
->>>>>>> 058a5e32b4fc44428ffc6072c7e1b297d710ee23
         unsigned int _frac, _modulus, _channelSpacing, _outputDivider, _fPDF, R_counter;
     
         // Port pin assignments
@@ -80,12 +74,8 @@ class ADF435x{
     private:
          // Instance variables for ...
     bool _powerdown, _auxOnOff, _rfEnabled, _feedbackType, _prescaler, _ABP;
-<<<<<<< HEAD
-    unsigned int _ref_doubler, _ref_halve;
-=======
-    unsigned int _doubler, _halve;
->>>>>>> 058a5e32b4fc44428ffc6072c7e1b297d710ee23
 
+    unsigned int _ref_doubler, _ref_halve;
     
     typedef struct R0bitfield{
         unsigned int ctrl:3;

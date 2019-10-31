@@ -7,11 +7,8 @@
   Code borrowed from Energia sketch 
  */
 
-<<<<<<< HEAD
     #define DEBUGMODE // comment out this line if you dont want debugging via
-=======
-    //#define DEBUGMODE // comment out this line if you dont want debugging via
->>>>>>> 058a5e32b4fc44428ffc6072c7e1b297d710ee23
+
                         // The serial port 
                         // Note that device will hang on startup until serial 
                         // port is opened
@@ -43,11 +40,9 @@
  
     #endif  
  
-<<<<<<< HEAD
+
     int frequency = 40121;    // Output frequency initially 40.121 MHz - figure in KHz
-=======
-    int frequency = 4000000;    // Output frequency initially 40MHz - figure in Hz divided by 10 to fit in 32 bit integer
->>>>>>> 058a5e32b4fc44428ffc6072c7e1b297d710ee23
+
     int referenceClock = 25;    // Reference clock 25MHz 
 
   

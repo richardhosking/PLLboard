@@ -10,7 +10,6 @@
 #include "ADF435x.h" 
 
   
-<<<<<<< HEAD
 // Initializes a new ADF435x object referenceClock (in MHz), and initial frequency KHz
 
 void ADF435x::initialize(uint32_t frequency, uint32_t referenceClock){
@@ -33,7 +32,7 @@ void ADF435x::initialize(uint32_t frequency, uint32_t referenceClock){
     //    reference divider and multiplier both 1 
     _ref_doubler = 0; 	// reference doubler 1
     _ref_halve = 0; 	// reference divider 1
-=======
+
 // Initializes a new ADF435x object referenceClock (in MHz), and initial frequency Hz/10 to fit in 2^32
 
 void ADF435x::initialize(uint32_t frequency, uint32_t referenceClock){
@@ -45,20 +44,15 @@ void ADF435x::initialize(uint32_t frequency, uint32_t referenceClock){
     if (_feedbackType) _ABP = 1;
     _doubler = 0; //
     _halve = 0; //
->>>>>>> 058a5e32b4fc44428ffc6072c7e1b297d710ee23
     _channelSpacing = 25000; //25KHz
     _powerdown = 0;
     _auxOnOff = 0;
     _rfEnabled = 1;
-<<<<<<< HEAD
+
     _prescaler = 0;  // 4/5 or 8/9...
 
-    // default power out = -5dbm or 0 in this case... (0-3)
-=======
-    _prescaler = 1;  // 4/5 or 8/9...
 
     // default power = -5dbm or 0 in this case... (0-3)
->>>>>>> 058a5e32b4fc44428ffc6072c7e1b297d710ee23
     _auxPower = 0;
     _rfPower = 0;
 
@@ -69,10 +63,6 @@ void ADF435x::initialize(uint32_t frequency, uint32_t referenceClock){
 
     ADF435x::setFreq(_freq);
     
-<<<<<<< HEAD
-=======
-
->>>>>>> 058a5e32b4fc44428ffc6072c7e1b297d710ee23
     ADF435x::update();
 }
 
@@ -80,7 +70,6 @@ void ADF435x::initialize(uint32_t frequency, uint32_t referenceClock){
 int ADF435x::getFreq(){
     return _freq;
 }
-<<<<<<< HEAD
 
 // Set Frequency depending on keyboard input 
 // Range 32 to 4400 MHz 1 KHz steps 
@@ -137,96 +126,7 @@ if (VCO > 3600000) {
 }
 
 
-=======
-// set up for approx 40 MHz out temporary
-void ADF435x::setFreq(uint32_t freq){
-    R_counter = 250; // Divide 25 MHz to 100 KHz for channel spacing
-    _divider = 6; // divide main output by 64 for low freq out 
-    _mod = 1562; // 25 MHz clock 100KHz channel spacing 
-    _frac = 101; // reduce with fractional N to 1KHz channel spacing 
-    _integ = 29921; //Ref Freq 100KHz VCO range 2-4.5GHz 
-}
 
-/*void ADF435x::setFreq(uint32_t freq){
-// frequency passed is one tenth real value to stay within 32-bit value
-    _freq = freq;
-    int multiplier;
-    // selects the right divider range (ie, output divider is 2^(_divider))
-    // the multiplier is required if you're using fundamental feedback to N-counter
-    if (_freq > 220000000) {
-        _divider = 0;
-        multiplier = 1;
-        R_counter = 50;
-    }
-    else if (_freq > 110000000) {
-        _divider = 1;               // divide output by 2 
-        multiplier = 2;
-        R_counter = 25;
-        }
-        else if (_freq > 55000000) {
-            _divider = 2;            // divide output by 4 
-            multiplier = 4;
-            R_counter = 16;
-            }
-            else if (_freq > 27500000) {
-                    _divider = 3;          // divide output by 8  
-                    multiplier = 8;
-                    R_counter = 8;
-                }
-                else if (_freq >13750000) {
-                        _divider = 4;               // divide output by 16 
-                        multiplier = 16;
-                        R_counter = 4;
-                    }
-                    else if (_freq >6875000) {
-                            _divider = 5;               // divide output by 32 
-                            multiplier = 32;
-                            R_counter = 2;
-                        }
-                        else {  //_freq lies between 34.375MHz to 68.75MHz
-                            _divider = 6;               // divide output by 64 
-                            multiplier = 64;
-                            R_counter = 1;
-                        }
- 
-  
-
-        _mod = _refClk/_channelSpacing; // 10000000/100 = 1000000
-        _mod *= _doubler; //_doubler should always be set
-        _mod >>= _divider;
-        _mod /= R_counter;
- 
-        while (_mod < 4096) {
-            if(!_mod){_mod++;} // if _mod is zero loop will hang 
-            _mod *=2; // set mod as close to 4095 as possible...
-        }
-        _mod /= 2; //restore to less than 4096
-
-    uint64_t test = _freq*10;
-    test <<= _divider;
-    test *= R_counter;
-    uint32_t tast = _refClk << _doubler;
-    tast >>= _halve;
-    _integ = (uint64_t)(test/tast);
-    _frac = ((uint64_t)(test % tast)*_mod)/(int32_t)tast;
-    
-    // reduce the frac/mod fraction....
-    uint32_t x=1, y, z;
-    y = _mod; z = _frac;
-    while (x != 0) {
-        if (y>z) {
-            x = y - z;
-        }
-        else x = z - y;
-        y = z;
-        z = x;
-    }
-    _mod /= y; _frac /= y;
-   
-
-}
-*/
->>>>>>> 058a5e32b4fc44428ffc6072c7e1b297d710ee23
 // updates dynamic registers, and writes values to PLL board
 void ADF435x::update(){
     ADF435x::setR0();
@@ -236,11 +136,8 @@ void ADF435x::update(){
     ADF435x::setR4();
     ADF435x::setR5();
     
-<<<<<<< HEAD
     digitalWrite(ChipEnable,LOW); // Disable chip to write data 
-=======
     digitalWrite(ChipEnable,LOW);
->>>>>>> 058a5e32b4fc44428ffc6072c7e1b297d710ee23
 
     // writes registers to device
     ADF435x::programRegister(R5.reg5);
@@ -287,11 +184,8 @@ void ADF435x::auxDisable(void){
     _auxOnOff = 0;
     ADF435x::setR4();
     ADF435x::write4Bytes(R4.reg4);
-<<<<<<< HEAD
     ADF435x::update();
-=======
 //    ADF435x::update();
->>>>>>> 058a5e32b4fc44428ffc6072c7e1b297d710ee23
 }
 
 // CAREFUL!!!! pow must be 0, 1, 2, or 3... corresponding to -4, -1, 3, 5 dbm.
@@ -305,11 +199,7 @@ void ADF435x::setAuxPower(int pow){
 
 void ADF435x::setR0(){
     R0.d0.reserved = 0;
-<<<<<<< HEAD
     R0.d0.integer = _INT; // not less than 23 decimal
-=======
-    R0.d0.integer = _integ; // not less than 23 decimal
->>>>>>> 058a5e32b4fc44428ffc6072c7e1b297d710ee23
     R0.d0.frac = _frac;
     R0.d0.ctrl = 0;
 }
@@ -317,11 +207,7 @@ void ADF435x::setR0(){
 void ADF435x::setR1(){
     R1.d1.reserved = 0;
     R1.d1.phaseAdjust = 0; // disabled
-<<<<<<< HEAD
     R1.d1.prescaler = _prescaler; //  0 for 4/5 or 1 for 8/9 - VCO > 3.6GHz
-=======
-    R1.d1.prescaler = 1; //  4/5 or 8/9?
->>>>>>> 058a5e32b4fc44428ffc6072c7e1b297d710ee23
     R1.d1.phaseValue = 1; //recommended value
     R1.d1.modulus = _mod;
     R1.d1.ctrl = 1;
@@ -331,13 +217,8 @@ void ADF435x::setR2(){
     R2.d2.reserved = 0;
     R2.d2.noiseMode = 3;
     R2.d2.Muxout = 6;
-<<<<<<< HEAD
     R2.d2.refDoubler = _ref_doubler;
     R2.d2.refDivBy2 = _ref_halve;
-=======
-    R2.d2.refDoubler = _doubler;
-    R2.d2.refDivBy2 = _halve;
->>>>>>> 058a5e32b4fc44428ffc6072c7e1b297d710ee23
     R2.d2.rCounter = R_counter;  
     R2.d2.doubleBuffer = 0;
     R2.d2.chargePump = 7;
@@ -395,17 +276,6 @@ void ADF435x::setR5(){
 
 void ADF435x::programRegister(uint32_t registerData) {
     
-<<<<<<< HEAD
-=======
-    pinMode(ChipEnable, OUTPUT);  // Setup port
-    pinMode(LoadEnable, OUTPUT);
-    pinMode(DataClock, OUTPUT);
-    pinMode(LockDetect, INPUT);
-    pinMode(MultiplexData, INPUT);
-    pinMode(SerialData, OUTPUT);
-
-    
->>>>>>> 058a5e32b4fc44428ffc6072c7e1b297d710ee23
     digitalWrite(LoadEnable, LOW);
     digitalWrite(DataClock, LOW);
     digitalWrite(SerialData, LOW);  // Initialize all data lines 
@@ -434,22 +304,13 @@ void ADF435x::programRegister(uint32_t registerData) {
 // debugging only
 void ADF435x::debug(){
     Serial.print("\nFrequency(KHz) = ");Serial.println(_freq);
-<<<<<<< HEAD
     Serial.print("Integer = ");Serial.println(_INT);
-=======
-    //Serial.print("fPFD = ");Serial.println(tast);
-    Serial.print("Integer = ");Serial.println(_integ);
->>>>>>> 058a5e32b4fc44428ffc6072c7e1b297d710ee23
     Serial.print("Modulus = ");Serial.println(_mod);
     Serial.print("Fraction = ");Serial.println(_frac);
     Serial.print("R Counter = ");Serial.println(R_counter);
     Serial.print("Divider = ");Serial.println(_divider);
-<<<<<<< HEAD
-=======
-    //Serial.print("Multiplier = ");Serial.println(multiplier);
     Serial.print("Channel Spacing = ");Serial.println(_channelSpacing);
     Serial.print("Reference Clock = ");Serial.println(_refClk);
->>>>>>> 058a5e32b4fc44428ffc6072c7e1b297d710ee23
     Serial.print("R0 = ");
     Serial.println(R0.reg0,HEX);
     Serial.print("R0 = ");
