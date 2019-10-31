@@ -7,7 +7,7 @@
   Code borrowed from Energia sketch 
  */
 
-    #define DEBUGMODE // comment out this line if you dont want debugging via
+    //#define DEBUGMODE // comment out this line if you dont want debugging via
 
                         // The serial port 
                         // Note that device will hang on startup until serial 
@@ -41,12 +41,12 @@
     #endif  
  
 
-    int frequency = 40121;    // Output frequency initially 40.121 MHz - figure in KHz
+    uint32_t frequency = 52100;    // Output frequency initially figure in KHz
 
-    int referenceClock = 25;    // Reference clock 25MHz 
-
-  
-    PLL.initialize(frequency,referenceClock);
+      
+    PLL.initialize();
+    PLL.setFreq(frequency);
+    PLL.update();
 
     delay(100); 
     

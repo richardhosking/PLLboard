@@ -17,7 +17,7 @@ class ADF435x{
     public: 
  
         // Initialize with initial frequency, refClk (defaults to 10Mhz); 
-        void initialize(uint32_t, uint32_t );
+        void initialize();
 
 
         // Functions to turn on and off the PLL/VCO
@@ -40,42 +40,44 @@ class ADF435x{
         void update();
         void programRegister(uint32_t registerData); 
         
+        // functions to write data to register.
+        void setR0();
+        void setR1();
+        void setR2();
+        void setR3();
+        void setR4();
+        void setR5();
+        void writeRegister(byte[4]);
+        void write4Bytes(uint32_t); 
+        
        //Debugging 
         void debug();
         
         // Variables 
 
         uint32_t _freq, fPFD, _refClk, _INT;   // _INT is integer of main divider
-        int phase;
+        int phase, output_division;
         unsigned int _divider, _auxPower, _rfPower;
-        uint32_t _mod;
+        uint32_t _mod, VCO;
 	// _frac is fraction _modulus is modulus of fractional N divider
         unsigned int _frac, _modulus, _channelSpacing, _outputDivider, _fPDF, R_counter;
     
-        // Port pin assignments
-    int ChipEnable = 14;
-    int LoadEnable = 5;
-    int DataClock = 3;
-    int SerialData = 4;
-    int LockDetect = 15;
-    int MultiplexData = 6; 
+            // Port pin assignments
+        int ChipEnable = 14;
+        int LoadEnable = 5;
+        int DataClock = 3;
+        int SerialData = 4;
+        int LockDetect = 15;
+        int MultiplexData = 6; 
     
     
-    // function to write data to register.
-    void setR0();
-    void setR1();
-    void setR2();
-    void setR3();
-    void setR4();
-    void setR5();
-    void writeRegister(byte[4]);
-    void write4Bytes(uint32_t);
+ 
     
     private:
-         // Instance variables for ...
-    bool _powerdown, _auxOnOff, _rfEnabled, _feedbackType, _prescaler, _ABP;
+            // Instance variables for ...
+        bool _powerdown, _auxOnOff, _rfEnabled, _feedbackType, _prescaler, _ABP;
 
-    unsigned int _ref_doubler, _ref_halve;
+        unsigned int _ref_doubler, _ref_halve;
     
     typedef struct R0bitfield{
         unsigned int ctrl:3;
