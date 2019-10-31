@@ -1,14 +1,14 @@
 
 /*
-  Arduino board to drive an ADF4351 Fractional N PLL synthesizer 
-  Richard Hosking Aug 2019
+  Qduino Arduino board to drive an ADF4351 Fractional N PLL synthesizer 
+  Richard Hosking Aug - Oct 2019
   richardh@iinet.net.au
   Using Qduino board for 3.3V operation 
   Code borrowed from Energia sketch 
+  Will ultimately use a Raspberry Pi and touchscreen for freq and power level entry 
  */
 
     //#define DEBUGMODE // comment out this line if you dont want debugging via
-
                         // The serial port 
                         // Note that device will hang on startup until serial 
                         // port is opened
@@ -22,13 +22,12 @@
 
 
     ADF435x PLL;     // Class Constructor creates a ADF534x object called PLL 
-    qduino q;        // Class instance of Qduino
+    qduino q;        // Class constructor instance of Qduino
      
    
     void setup() {
         
     q.setup();
-
      
     #ifdef DEBUGMODE 
     //Initialize serial port for debugging and wait for port to open:
@@ -39,10 +38,8 @@
     }
  
     #endif  
- 
 
     uint32_t frequency = 52100;    // Output frequency initially figure in KHz
-
       
     PLL.initialize();
     PLL.setFreq(frequency);
@@ -58,8 +55,6 @@
 }
 
 void loop() {
-    //PLL.programRegister(0b10101010101010101010101010101010);
     delay(1000);
-    //Serial.println("Updated");
- 
+
 }
