@@ -103,10 +103,7 @@ if (VCO > 3600000) {
   _prescaler = 1 ;
   }
  
- /*_INT = 2467;   // Test should end up with 40.121 MHz 
- _frac = 755;
- _divider = 6; */
-}
+ }
 
 // gets current frequency setting
 int ADF435x::getFreq(){
