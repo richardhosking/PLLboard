@@ -12,9 +12,8 @@
   
 // Initializes a new ADF435x object referenceClock (in MHz), and initial frequency KHz
 
-void ADF435x::initialize(uint32_t frequency, uint32_t referenceClock){
-    _freq = frequency; 
-    _refClk = referenceClock;
+void ADF435x::initialize(){
+
     phase = 1;
     
     // Setup Port pins
@@ -42,77 +41,77 @@ void ADF435x::initialize(uint32_t frequency, uint32_t referenceClock){
     // default power = -5dbm or 0 in this case... (0-3)
     _auxPower = 0;
     _rfPower = 0;
-
-    // sets register values which don't have dynamic values...
-    ADF435x::setR1();
-    ADF435x::setR3();
-    ADF435x::setR5();
-
-    ADF435x::setFreq(_freq);
     
-    ADF435x::update();
-}
+     // Reference clock on this board is 25MHz
+    R_counter = 25;  	// divide reference by 25 to make INT step size 1MHz 
+    _mod = 1000;	
+    // Modulus of Frac N section 1000 to give final freq step size of 1 KHz  
+ }                                                                                                                                                                                                                                                                                                                       
 
-// gets current frequency setting
-int ADF435x::getFreq(){
-    return _freq;
-}
 
 // Set Frequency depending on keyboard input 
 // Range 32 to 4400 MHz 1 KHz steps 
 // set up for approx 40 MHz out temporary so I can see it on the Spectrum analyser
 
 void ADF435x::setFreq(uint32_t freq){
-    
-  // Reference clock on this board is 25MHz
-  
-    R_counter = 25;  	// divide reference by 25 to make INT step size 1MHz 
-    _mod = 1000;	// Modulus of Frac N section 1000 to give final freq step size of 1 KHz  
-    
-    if (_freq > 2200000) {
+     
+  _freq = freq;
+   
+    if (_freq < 4400000 && _freq >= 2200000) {
         _divider = 0; 		// output_divider = 1;
+        output_division = 1;
      }
-    else if (_freq > 1100000) {
+    else if (_freq >= 1100000) {
         _divider = 1;           // divide output by 2;
+        output_division = 2;
           }
-        else if (_freq > 550000) {
+        else if (_freq >= 550000) {
             _divider = 2;            // divide output by 4 
+            output_division = 4;
               }
-            else if (_freq > 275000) {
-                    _divider = 3;          // divide output by 8  
+            else if (_freq >= 275000) {
+                    _divider = 3;          // divide output by 8 
+                    output_division = 8;
                   }
-                else if (_freq >137500) {
-                        _divider = 4;               // divide output by 16 
+                else if (_freq >= 137500) {
+                        _divider = 4;        // divide output by 16 
+                        output_division = 16;
                      }
-                    else if (_freq >68750) {
-                            _divider = 5;               // divide output by 32 
+                    else if (_freq >= 68750) {
+                            _divider = 5;      // divide output by 32
+                            output_division = 32;
                          }
-                        else {  			//_freq lies between 34.375MHz to 68.75MHz
-                            _divider = 6;               // divide output by 64 
-                        }
- 
-// VCO Output division = 2^(_divider)
-int output_division = 2^(_divider);
+                        else if (34275 < _freq && _freq <= 68750){   
+                            //_freq lies between 34.375MHz to 68.75MHz
+                            _divider = 6;
+                            output_division = 64;
+                    }
 
 //Final freq = 1000*(INT + frac/mod)/(output division) KHz
 //    quotient = dividend / divisor;
 //    remainder = dividend % divisor;
 
 // Hence 
-uint32_t VCO = _freq *output_division;
+VCO = _freq *output_division;
 
 _INT = (uint32_t)(VCO/1000) ; //quotient integer part 
 
-_frac = (uint32_t)(VCO%1000)*1000 ; // remainder X 1000 
+_frac = (uint32_t) VCO%1000 ; // remainder X 1000 
 
 // If VCO has to go above 3.6GHz prescaler should be set to 8/9
 if (VCO > 3600000) {
   _prescaler = 1 ;
   }
  
+ /*_INT = 2467;   // Test should end up with 40.121 MHz 
+ _frac = 755;
+ _divider = 6; */
 }
 
-
+// gets current frequency setting
+int ADF435x::getFreq(){
+    return _freq;
+}
 
 // updates dynamic registers, and writes values to PLL board
 void ADF435x::update(){
@@ -290,14 +289,15 @@ void ADF435x::programRegister(uint32_t registerData) {
 
 // debugging only
 void ADF435x::debug(){
-    Serial.print("\nFrequency(KHz) = ");Serial.println(_freq);
+    Serial.print("Frequency(KHz) = ");Serial.println(_freq);
+    Serial.print("Output division = ");Serial.println(output_division);
+    Serial.print("VCO = ");Serial.println(VCO);
     Serial.print("Integer = ");Serial.println(_INT);
     Serial.print("Modulus = ");Serial.println(_mod);
     Serial.print("Fraction = ");Serial.println(_frac);
     Serial.print("R Counter = ");Serial.println(R_counter);
     Serial.print("Divider = ");Serial.println(_divider);
-    Serial.print("Channel Spacing = ");Serial.println(_channelSpacing);
-    Serial.print("Reference Clock = ");Serial.println(_refClk);
+
     Serial.print("R0 = ");
     Serial.println(R0.reg0,HEX);
     Serial.print("R0 = ");
