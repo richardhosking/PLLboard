@@ -32,8 +32,7 @@ void ADF435x::initialize(){
     _ref_doubler = 0; 	// reference doubler 1
     _ref_halve = 0; 	// reference divider 1
 
-    _channelSpacing = 25000; //25KHz
-    _powerdown = 0;
+     _powerdown = 0;
     _auxOnOff = 0;
     _rfEnabled = 1;
     _prescaler = 0;  // 4/5 or 8/9...
@@ -43,15 +42,16 @@ void ADF435x::initialize(){
     _rfPower = 0;
     
      // Reference clock on this board is 25MHz
-    R_counter = 25;  	// divide reference by 25 to make INT step size 1MHz 
+    // divide reference by 25 to make INT step size 1MHz 
+    R_counter = 25;  	
+    // Modulus of Frac N section 1000 to give final freq step size of 1 KHz     
     _mod = 1000;	
-    // Modulus of Frac N section 1000 to give final freq step size of 1 KHz  
+  
  }                                                                                                                                                                                                                                                                                                                       
 
 
 // Set Frequency depending on keyboard input 
 // Range 32 to 4400 MHz 1 KHz steps 
-// set up for approx 40 MHz out temporary so I can see it on the Spectrum analyser
 
 void ADF435x::setFreq(uint32_t freq){
      
@@ -96,7 +96,7 @@ VCO = _freq *output_division;
 
 _INT = (uint32_t)(VCO/1000) ; //quotient integer part 
 
-_frac = (uint32_t) VCO%1000 ; // remainder X 1000 
+_frac = (uint32_t) VCO%1000 ; // remainder  
 
 // If VCO has to go above 3.6GHz prescaler should be set to 8/9
 if (VCO > 3600000) {
@@ -120,8 +120,7 @@ void ADF435x::update(){
     ADF435x::setR5();
     
     digitalWrite(ChipEnable,LOW); // Disable chip to write data 
-    digitalWrite(ChipEnable,LOW);
-
+ 
     // writes registers to device
     ADF435x::programRegister(R5.reg5);
     ADF435x::programRegister(R4.reg4);
@@ -160,15 +159,13 @@ void ADF435x::setRfPower(int pow){
 void ADF435x::auxEnable(void){
     _auxOnOff = 1;
     ADF435x::setR4();
-    ADF435x::write4Bytes(R4.reg4);
+    ADF435x::update();
 }
 
 void ADF435x::auxDisable(void){
     _auxOnOff = 0;
     ADF435x::setR4();
-    ADF435x::write4Bytes(R4.reg4);
     ADF435x::update();
-//    ADF435x::update();
 }
 
 // CAREFUL!!!! pow must be 0, 1, 2, or 3... corresponding to -4, -1, 3, 5 dbm.
@@ -269,18 +266,13 @@ void ADF435x::programRegister(uint32_t registerData) {
         bitdata = bitRead(data, i); // Get each bit of register data, starting with MSB
     
         digitalWrite(SerialData, bitdata);  // and write to ADF4351
-        //delay(10);
         digitalWrite(DataClock, HIGH);
-        //delay(10);
         digitalWrite(DataClock, LOW);
-        //delay(10);
-  }
+   }
      
   digitalWrite(LoadEnable, HIGH);
-         //delay(10);
   digitalWrite(LoadEnable, LOW);
-         //delay(10);
-  
+   
 }
 
 
